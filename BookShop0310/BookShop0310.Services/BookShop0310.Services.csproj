@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BookShop0310.Common\BookShop0310.Common.csproj" />
+    <ProjectReference Include="..\BookShop0310.Data\BookShop0310.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 # BookShop0310
 ## REST API ASP NET CORE
 
-## Define the following endpoints in your service project
+## Define the following endpoints in service project
 | Http Method | Endpoint | Description |
 | :---        |    :----   |          :--- |
 | GET     | /api/authors/{id}| Gets author with id, first name, last name and a list of all his/her book titles.  |

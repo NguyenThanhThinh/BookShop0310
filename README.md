@@ -11,4 +11,10 @@ Book shop service use asp net core
 | GET     | /api/books?search={word}| Gets top 10 books which contain the given substring, sorted by title (ascending). Returns only the title and id of the books.  |
 | PUT     | /api/books/{id}| Edits the book. Receives book title, description, price, copies, edition, age restriction, release date and author id.  |
 | DELETE     | /api/books/{id}| Delete a book  |
+| GET     | /api/categories | Get all categories  |
+| GET     | /api/categories/{id}| Get a category  |
+| PUT     | /api/categories/{id}| Edit a category  |
+| DELETE     | /api/categories/{id}| Delete a category  |
+| POST     | /api/categories | Adds new a category by name.Make sure no duplicates are created. |
+
 

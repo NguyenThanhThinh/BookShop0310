@@ -11,17 +11,17 @@ namespace BookShop0310.Api.Controllers
 
     public class CategoriesController : BaseController
     {
-        private readonly ICategoryService categoryService;
+        private readonly ICategoryService _categoryService;
 
         public CategoriesController(ICategoryService categoryService)
         {
-            this.categoryService = categoryService;
+            this._categoryService = categoryService;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var result = await categoryService.AllAsync();
+            var result = await _categoryService.AllAsync();
 
             return this.OkOrNotFound(result);
         }
@@ -29,7 +29,7 @@ namespace BookShop0310.Api.Controllers
         [HttpGet(WithId)]
         public async Task<IActionResult> GetById(int id)
         {
-            var getCategoryById = await categoryService.GetByIdAsync(id);
+            var getCategoryById = await _categoryService.GetByIdAsync(id);
 
             return this.OkOrNotFound(getCategoryById);
         }
@@ -38,7 +38,7 @@ namespace BookShop0310.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequestModel model)
         {
-            var idResult = await categoryService.Create(model.Name);
+            var idResult = await _categoryService.Create(model.Name);
 
             if (idResult == 0) return BadRequest($@"Category with Name: ""{model.Name}"" already exists.");
 
@@ -49,7 +49,7 @@ namespace BookShop0310.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Edit(int id, [FromBody] EditCategoryNameRequestModel model)
         {
-            var success = await categoryService.EditNameByIdAsync(id, model.Name);
+            var success = await _categoryService.EditNameByIdAsync(id, model.Name);
 
             if (!success)
                 return BadRequest($@"Category with Id {id} does not exist or Name: ""{model.Name}"" already exists.");
@@ -60,7 +60,7 @@ namespace BookShop0310.Api.Controllers
         [HttpDelete(WithId)]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await categoryService.Delete(id);
+            var success = await _categoryService.Delete(id);
 
             if (!success) return BadRequest($"Category with Id {id} does not exist");
 

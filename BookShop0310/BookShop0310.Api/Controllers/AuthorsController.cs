@@ -11,17 +11,17 @@ namespace BookShop0310.Api.Controllers
 
     public class AuthorsController : BaseController
     {
-        private readonly IAuthorService authorService;
+        private readonly IAuthorService _authorService;
 
         public AuthorsController(IAuthorService authorService)
         {
-            this.authorService = authorService;
+            this._authorService = authorService;
         }
 
         [HttpGet(WithId)]
         public async Task<IActionResult> GetById(int id)
         {
-            var getAuthorById = await authorService.GetByIdAsync(id);
+            var getAuthorById = await _authorService.GetByIdAsync(id);
 
             return this.OkOrNotFound(getAuthorById);
         }
@@ -29,7 +29,7 @@ namespace BookShop0310.Api.Controllers
         [HttpGet(WithId + "/books")]
         public async Task<IActionResult> Books(int id)
         {
-            var getBook = await authorService.GetBooksAsync(id);
+            var getBook = await _authorService.GetBooksAsync(id);
 
             return this.OkOrNotFound(getBook);
         }
@@ -38,7 +38,7 @@ namespace BookShop0310.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Post([FromBody] PostAuthorRequestModel authorModel)
         {
-            await authorService.CreateAsync(authorModel.FirstName, authorModel.LastName);
+            await _authorService.CreateAsync(authorModel.FirstName, authorModel.LastName);
 
             return Ok(authorModel);
         }

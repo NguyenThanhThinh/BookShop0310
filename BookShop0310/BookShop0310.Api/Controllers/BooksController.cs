@@ -11,28 +11,28 @@ namespace BookShop0310.Api.Controllers
 
     public class BooksController : BaseController
     {
-        private readonly IBookService bookService;
+        private readonly IBookService _bookService;
 
-        private readonly IAuthorService authorService;
+        private readonly IAuthorService _authorService;
 
         public BooksController(IBookService bookService, IAuthorService authorService)
         {
-            this.bookService = bookService;
+            this._bookService = bookService;
 
-            this.authorService = authorService;
+            this._authorService = authorService;
         }
 
         [HttpGet(WithId)]
         public async Task<IActionResult> GetBookDetail(int id)
         {
-            var getBookById = await bookService.GetByIdAsync(id);
+            var getBookById = await _bookService.GetByIdAsync(id);
 
             return this.OkOrNotFound(getBookById);
         }
 
         public async Task<IActionResult> TopBooks([FromQuery] string search = "")
         {
-            var getBookTitle = await bookService.GetTopBooksByTitleAscendingAsync(search);
+            var getBookTitle = await _bookService.GetTopBooksByTitleAscendingAsync(search);
 
             return this.OkOrNotFound(getBookTitle);
         }
@@ -41,9 +41,9 @@ namespace BookShop0310.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Create([FromBody] CreateBookRequestModel bookModel)
         {
-            if (!await authorService.Exist(bookModel.AuthorId)) return BadRequest("Author does not exist");
+            if (!await _authorService.Exist(bookModel.AuthorId)) return BadRequest("Author does not exist");
 
-            var id = await bookService.Create(
+            var id = await _bookService.Create(
                 bookModel.Title,
                 bookModel.Description,
                 bookModel.Price,
@@ -61,7 +61,7 @@ namespace BookShop0310.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> EditById(int id, [FromBody] EditBookByIdRequestModel bookModel)
         {
-            var success = await bookService.EditByIdAsync(
+            var success = await _bookService.EditByIdAsync(
                 id,
                 bookModel.Title,
                 bookModel.Description,
@@ -80,7 +80,7 @@ namespace BookShop0310.Api.Controllers
         [HttpDelete(WithId)]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await bookService.Delete(id);
+            var success = await _bookService.Delete(id);
 
             if (!success) return BadRequest($"No book with Id {id}  exist. ");
 

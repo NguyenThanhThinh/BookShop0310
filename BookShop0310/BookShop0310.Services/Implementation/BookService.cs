@@ -12,11 +12,11 @@ namespace BookShop0310.Services.Implementation
 {
     public class BookService : IBookService
     {
-        private readonly BookShop0310DbContext db;
+        private readonly BookShop0310DbContext _db;
 
         public BookService(BookShop0310DbContext db)
         {
-            this.db = db;
+            this._db = db;
         }
 
         public async Task<int> Create(string title, string description, double price, int copies, string edition,
@@ -26,7 +26,7 @@ namespace BookShop0310.Services.Implementation
                 .Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                 .ToHashSet();
 
-            var existingCategories = await db
+            var existingCategories = await _db
                 .Categories
                 .Where(ct => splitCategoryNames
                     .Contains(ct.Name))
@@ -36,7 +36,7 @@ namespace BookShop0310.Services.Implementation
 
             CreateAndAddNonExistingCategories(splitCategoryNames, existingCategories, allCategories);
 
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             var book = new Book
             {
@@ -55,22 +55,22 @@ namespace BookShop0310.Services.Implementation
                 CategoryId = c.Id
             }));
 
-            await db.Books.AddAsync(book);
+            await _db.Books.AddAsync(book);
 
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             return book.Id;
         }
 
         public async Task<bool> Delete(int id)
         {
-            var book = db.Books.FirstOrDefaultAsync(n => n.Id == id);
+            var book = _db.Books.FirstOrDefaultAsync(n => n.Id == id);
 
             if (book == null) return false;
 
-            db.Remove(book);
+            _db.Remove(book);
 
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             return true;
         }
@@ -78,7 +78,7 @@ namespace BookShop0310.Services.Implementation
         public async Task<bool> EditByIdAsync(int id, string title, string description, double price, int copies,
             string edition, int? ageRestriction, DateTime releaseDate, int authorId)
         {
-            var book = await db.Books
+            var book = await _db.Books
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null) return false;
@@ -99,21 +99,21 @@ namespace BookShop0310.Services.Implementation
 
             book.AuthorId = authorId;
 
-            await db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<IEnumerable<GetBooksByIdServiceModel>> GetByIdAsync(int id)
         {
-            var getBookById = await db.Books.Where(n => n.Id == id).ProjectTo<GetBooksByIdServiceModel>().ToListAsync();
+            var getBookById = await _db.Books.Where(n => n.Id == id).ProjectTo<GetBooksByIdServiceModel>().ToListAsync();
 
             return getBookById != null ? getBookById : null;
         }
 
         public async Task<IEnumerable<GetBookTitleAndIdServiceModel>> GetTopBooksByTitleAscendingAsync(string search)
         {
-            var result = await db.Books
+            var result = await _db.Books
                 .Where(b => b.Description.ToLower()
                                 .Contains(search.ToLower()) ||
                             b.Title.ToLower()
@@ -141,7 +141,7 @@ namespace BookShop0310.Services.Implementation
 
                     allCategories.Add(category);
 
-                    db.Categories.Add(category);
+                    _db.Categories.Add(category);
                 }
         }
     }
